@@ -797,6 +797,7 @@ void state_read(struct snapraid_state* state)
 	struct snapraid_file* file;
 	block_off_t blockidx;
 	block_off_t blockmax;
+	block_off_t paritymax;
 	unsigned line;
 	unsigned count_file;
 	unsigned count_block;
@@ -864,6 +865,7 @@ void state_read(struct snapraid_state* state)
 	line = 1;
 	blockidx = 0;
 	blockmax = 0;
+	paritymax = 0;
 
 	while (1) {
 		char buffer[PATH_MAX];
@@ -921,6 +923,9 @@ void state_read(struct snapraid_state* state)
 			case 'b' :
 				block_state_set(block, BLOCK_STATE_BLK);
 				hash = oathash8(hash, 'b');
+
+				if (v_pos + 1 > paritymax)
+					paritymax = v_pos + 1;
 				break;
 			case 'n' :
 				block_state_set(block, BLOCK_STATE_NEW);
@@ -1549,7 +1554,7 @@ void state_read(struct snapraid_state* state)
 		exit(EXIT_FAILURE);
 	}
 
-	state->loaded_blockmax = blockmax;
+	state->loaded_blockmax = paritymax;
 
 	/* update the mapping */
 	state_map(state);

@@ -1,6 +1,11 @@
 SnapRAID HISTORY
 ================
 
+3.3 2013/10
+===========
+ * Relaxed the check about small parity files, to allow to recover
+   after a failed sync before resizing the parity files.
+
 3.2 2013/7
 ==========
  * Fix a directory creation problem in Windows when the "disk" option points to
