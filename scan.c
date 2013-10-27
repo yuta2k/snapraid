@@ -177,8 +177,11 @@ static void scan_file_remove(struct snapraid_state* state, struct snapraid_disk*
 		case BLOCK_STATE_BLK :
 			/* we keep the hash making it an "old" hash, because the parity is still containing data for it */
 			break;
-		case BLOCK_STATE_CHG :
 		case BLOCK_STATE_NEW :
+			/* NEW blocks don't have a hash, then we set it to the 'unspecified' 0 value */
+			memset(block->hash, 0, HASH_SIZE);
+			break;
+		case BLOCK_STATE_CHG :
 			/* in these cases we don't know if the old state is still the one */
 			/* stored inside the parity, because after an aborted sync, the parity */
 			/* may be or may be not have been updated with the new data */
