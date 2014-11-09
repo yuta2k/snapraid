@@ -2028,7 +2028,7 @@ static void state_read_text(struct snapraid_state* state, const char* path, STRE
 				exit(EXIT_FAILURE);
 				/* LCOV_EXCL_STOP */
 			}
-		} else if (strcmp(tag, "map") == 0) {
+		} else if (strcmp(tag, "map") == 0 || strcmp(tag, "mapping") == 0) {
 			struct snapraid_map* map;
 			char uuid[UUID_MAX];
 			uint32_t v_pos;
@@ -2057,6 +2057,43 @@ static void state_read_text(struct snapraid_state* state, const char* path, STRE
 				/* LCOV_EXCL_STOP */
 			}
 
+			/* from SnapRAID 7.0 the 'mapping' command includes the free space */
+			if (strcmp(tag, "mapping") == 0) {
+				uint32_t dummy;
+
+				c = sgetc(f);
+				if (c != ' ') {
+					/* LCOV_EXCL_START */
+					fprintf(stderr, "Invalid 'map' specification in '%s' at line %u\n", path, line);
+					exit(EXIT_FAILURE);
+					/* LCOV_EXCL_STOP */
+				}
+
+				ret = sgetu32(f, &dummy);
+				if (ret < 0) {
+					/* LCOV_EXCL_START */
+					fprintf(stderr, "Invalid 'map' specification in '%s' at line %u\n", path, line);
+					exit(EXIT_FAILURE);
+					/* LCOV_EXCL_STOP */
+				}
+
+				c = sgetc(f);
+				if (c != ' ') {
+					/* LCOV_EXCL_START */
+					fprintf(stderr, "Invalid 'map' specification in '%s' at line %u\n", path, line);
+					exit(EXIT_FAILURE);
+					/* LCOV_EXCL_STOP */
+				}
+
+				ret = sgetu32(f, &dummy);
+				if (ret < 0) {
+					/* LCOV_EXCL_START */
+					fprintf(stderr, "Invalid 'map' specification in '%s' at line %u\n", path, line);
+					exit(EXIT_FAILURE);
+					/* LCOV_EXCL_STOP */
+				}
+			}
+
 			c = sgetc(f);
 			if (c != ' ') {
 				sungetc(c, f);
@@ -2075,6 +2112,67 @@ static void state_read_text(struct snapraid_state* state, const char* path, STRE
 			map = map_alloc(buffer, v_pos, uuid);
 
 			tommy_list_insert_tail(&state->maplist, &map->node, map);
+		} else if (strcmp(tag, "parity") == 0) {
+			/* from SnapRAID 7.0 the 'parity' command includes the free space */
+			char uuid[UUID_MAX];
+			uint32_t dummy;
+
+			ret = sgetu32(f, &dummy);
+			if (ret < 0) {
+				/* LCOV_EXCL_START */
+				fprintf(stderr, "Invalid 'parity' specification in '%s' at line %u\n", path, line);
+				exit(EXIT_FAILURE);
+				/* LCOV_EXCL_STOP */
+			}
+
+			c = sgetc(f);
+			if (c != ' ') {
+				/* LCOV_EXCL_START */
+				fprintf(stderr, "Invalid 'parity' specification in '%s' at line %u\n", path, line);
+				exit(EXIT_FAILURE);
+				/* LCOV_EXCL_STOP */
+			}
+
+			ret = sgetu32(f, &dummy);
+			if (ret < 0) {
+				/* LCOV_EXCL_START */
+				fprintf(stderr, "Invalid 'parity' specification in '%s' at line %u\n", path, line);
+				exit(EXIT_FAILURE);
+				/* LCOV_EXCL_STOP */
+			}
+
+			c = sgetc(f);
+			if (c != ' ') {
+				/* LCOV_EXCL_START */
+				fprintf(stderr, "Invalid 'parity' specification in '%s' at line %u\n", path, line);
+				exit(EXIT_FAILURE);
+				/* LCOV_EXCL_STOP */
+			}
+
+			ret = sgetu32(f, &dummy);
+			if (ret < 0) {
+				/* LCOV_EXCL_START */
+				fprintf(stderr, "Invalid 'parity' specification in '%s' at line %u\n", path, line);
+				exit(EXIT_FAILURE);
+				/* LCOV_EXCL_STOP */
+			}
+
+			/* check if the uuid is present */
+			/* uuid must be the latest one as it could be also empty */
+			c = sgetc(f);
+			if (c != ' ') {
+				sungetc(c, f);
+				uuid[0] = 0;
+			} else {
+				/* read the uuid */
+				ret = sgettok(f, uuid, sizeof(uuid));
+				if (ret < 0) {
+					/* LCOV_EXCL_START */
+					fprintf(stderr, "Invalid 'map' specification in '%s' at line %u\n", path, line);
+					exit(EXIT_FAILURE);
+					/* LCOV_EXCL_STOP */
+				}
+			}
 		} else if (strcmp(tag, "sign") == 0) {
 			uint32_t sign;
 
@@ -2639,7 +2737,8 @@ static void state_read_binary(struct snapraid_state* state, const char* path, ST
 		exit(EXIT_FAILURE);
 		/* LCOV_EXCL_STOP */
 	}
-	if (memcmp(buffer, "SNAPCNT1\n\3\0\0", 12) != 0) {
+	if (memcmp(buffer, "SNAPCNT1\n\3\0\0", 12) != 0
+		&& memcmp(buffer, "SNAPCNT2\n\3\0\0", 12) != 0) {
 		/* LCOV_EXCL_START */
 		if (memcmp(buffer, "SNAPCNT", 7) != 0) {
 			decoding_error(path, f);
@@ -3349,7 +3448,7 @@ static void state_read_binary(struct snapraid_state* state, const char* path, ST
 				exit(EXIT_FAILURE);
 				/* LCOV_EXCL_STOP */
 			}
-		} else if (c == 'm') {
+		} else if (c == 'm' || c == 'M') {
 			struct snapraid_map* map;
 			char uuid[UUID_MAX];
 			uint32_t v_pos;
@@ -3369,6 +3468,27 @@ static void state_read_binary(struct snapraid_state* state, const char* path, ST
 				decoding_error(path, f);
 				exit(EXIT_FAILURE);
 				/* LCOV_EXCL_STOP */
+			}
+
+			/* from SnapRAID 7.0 the 'M' command includes the free space */
+			if (c == 'M') {
+				uint32_t dummy;
+
+				ret = sgetb32(f, &dummy);
+				if (ret < 0) {
+					/* LCOV_EXCL_START */
+					decoding_error(path, f);
+					exit(EXIT_FAILURE);
+					/* LCOV_EXCL_STOP */
+				}
+
+				ret = sgetb32(f, &dummy);
+				if (ret < 0) {
+					/* LCOV_EXCL_START */
+					decoding_error(path, f);
+					exit(EXIT_FAILURE);
+					/* LCOV_EXCL_STOP */
+				}
 			}
 
 			/* read the uuid */
@@ -3399,6 +3519,42 @@ static void state_read_binary(struct snapraid_state* state, const char* path, ST
 			tommy_array_grow(&disk_mapping, mapping_max + 1);
 			tommy_array_set(&disk_mapping, mapping_max, disk);
 			++mapping_max;
+		} else if (c == 'P') {
+			/* from SnapRAID 7.0 the 'P' command includes the free space */
+			char uuid[UUID_MAX];
+			uint32_t dummy;
+
+			ret = sgetb32(f, &dummy);
+			if (ret < 0) {
+				/* LCOV_EXCL_START */
+				decoding_error(path, f);
+				exit(EXIT_FAILURE);
+				/* LCOV_EXCL_STOP */
+			}
+
+			ret = sgetb32(f, &dummy);
+			if (ret < 0) {
+				/* LCOV_EXCL_START */
+				decoding_error(path, f);
+				exit(EXIT_FAILURE);
+				/* LCOV_EXCL_STOP */
+			}
+
+			ret = sgetb32(f, &dummy);
+			if (ret < 0) {
+				/* LCOV_EXCL_START */
+				decoding_error(path, f);
+				exit(EXIT_FAILURE);
+				/* LCOV_EXCL_STOP */
+			}
+
+			ret = sgetbs(f, uuid, sizeof(uuid));
+			if (ret < 0) {
+				/* LCOV_EXCL_START */
+				decoding_error(path, f);
+				exit(EXIT_FAILURE);
+				/* LCOV_EXCL_STOP */
+			}
 		} else if (c == 'N') {
 			uint32_t crc_stored;
 			uint32_t crc_computed;
