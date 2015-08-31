@@ -3,8 +3,13 @@ SnapRAID HISTORY
 
 8.2 2015/08
 ===========
+ * Fixes an invalid assumption that could happen when using the
+   -e, --filter-error option with "fix" or "check".
+   This was triggered by a very specific pattern of fragmented files
+   and bad blocks combination, not so easy to reproduce.
+   This had no bad effect, if not preventing the command to run.
  * Update 'best' RAID functions for recent Atom CPUs.
- * Validate filters specificatinos rejecting relative paths.
+ * Validate filter specifications rejecting relative paths.
 
 8.1 2015/05
 ===========
