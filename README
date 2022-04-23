@@ -9,6 +9,13 @@ This fork avoids the following warning when a btrfs subvolume is set to "data".
 WARNING! UUID is unsupported for disks: 'd1', 'd2'. Not using inodes to detect move operations.
 ```
 
+## Dependency
+
+`libuuid.so` and `uuid/uuid.h` is required.
+
+debian: `apt install uuid-dev`
+RHEL: `dnf install libuuid-devel`
+
 ## How to work
 
 Executing `state` on a btrfs subvolume (directory) returns a device number
