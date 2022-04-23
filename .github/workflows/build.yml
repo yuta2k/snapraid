@@ -2,7 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+      - master
+      - develop-btrfs-subvol
   pull_request:
     branches: [ master ]
 
@@ -13,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: brew install automake
       - run: autoreconf -i
-      - run: ./configure --enable-warning-as-error
+      - run: ./configure --enable-warning-as-error --without-btrfs_subvol_support
       - run: make all
       - run: make distcheck
   build-linux:
@@ -37,7 +39,7 @@ jobs:
           update: true
           install: mingw-w64-x86_64-gcc autoconf automake make
       - run: autoreconf -i
-      - run: ./configure --enable-warning-as-error
+      - run: ./configure --enable-warning-as-error --without-btrfs_subvol_support
       - run: make all
       - run: make distcheck
 

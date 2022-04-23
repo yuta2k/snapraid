@@ -17,7 +17,7 @@ jobs:
       - image: circleci/buildpack-deps:stable
     steps:
       - checkout
-      - run: autoreconf -i && ./configure --enable-warning-as-error && make all dist
+      - run: autoreconf -i && ./configure --enable-warning-as-error --without-btrfs_subvol_support && make all dist
   build_ubuntu:
     machine:
       image: ubuntu-2004:202101-01

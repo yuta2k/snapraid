@@ -112,7 +112,7 @@ dist-hook:
 
 EXTRA_DIST = \
 	autogen.sh autover.sh \
-	README AUTHORS HISTORY INSTALL COPYING TODO CHECK INSTALL.windows \
+	README.md AUTHORS HISTORY INSTALL COPYING TODO CHECK INSTALL.windows \
 	snapraid.d snapraid.1 snapraid.txt \
 	test/test-par1.conf \
 	test/test-par2.conf \
@@ -1016,7 +1016,7 @@ distwindows-x86: $(DISTWIN)
 	cp support/smartctl.exe tmp/smartctl.exe
 	todos < snapraid.conf.example.windows > tmp/snapraid.conf.example
 	todos < INSTALL.windows > tmp/install.txt
-	todos < README > tmp/readme.txt
+	todos < README.md > tmp/readme.md
 	todos < AUTHORS > tmp/authors.txt
 	todos < HISTORY > tmp/history.txt
 	todos < COPYING > tmp/copying.txt
@@ -1031,7 +1031,7 @@ distwindows-x64: $(DISTWIN)
 	cp support/smartctl.exe tmp/smartctl.exe
 	todos < snapraid.conf.example.windows > tmp/snapraid.conf.example
 	todos < INSTALL.windows > tmp/install.txt
-	todos < README > tmp/readme.txt
+	todos < README.md > tmp/readme.md
 	todos < AUTHORS > tmp/authors.txt
 	todos < HISTORY > tmp/history.txt
 	todos < COPYING > tmp/copying.txt
