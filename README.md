@@ -1,9 +1,10 @@
 snapraid-btrfs-subvol
 ========
 
-NOT ADEQUATELY TESTED. Please use for evaluation purposes only.
+**NOT ADEQUATELY TESTED**  
+Please use for evaluation purposes only.
 
-This fork avoids the following warning when a btrfs subvolume is set to "data".
+This fork avoids the following warning when a btrfs subvolume is set to `data` .
 
 ```
 WARNING! UUID is unsupported for disks: 'd1', 'd2'. Not using inodes to detect move operations.
@@ -13,20 +14,16 @@ WARNING! UUID is unsupported for disks: 'd1', 'd2'. Not using inodes to detect m
 
 `libuuid.so` and `uuid/uuid.h` is required.
 
-debian: `apt install uuid-dev`
+debian: `apt install uuid-dev`  
 RHEL: `dnf install libuuid-devel`
 
 ## How to work
 
-Executing `state` on a btrfs subvolume (directory) returns a device number
-that does not physically exist.
-
-The original SnapRaid looks for the device number in `/proc/self/mountinfo`
-to get the UUID of the disk, but it does not exist.
+Executing `state` on a btrfs subvolume (directory) returns a device number that does not physically exist.  
+The original SnapRaid looks for the device number in `/proc/self/mountinfo` to get the UUID of the disk, but it does not exist.  
 Detail: https://lwn.net/Articles/866709/
 
-This fork attempts to get the UUID of a btrfs subvolume
-when the UUID cannot be getted by the above method.
+This fork attempts to get the UUID of a btrfs subvolume when the UUID cannot be getted by the above method.
 
 ## Limitation
 
