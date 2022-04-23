@@ -11,6 +11,8 @@ on:
 jobs:
   build-mac:
     runs-on: macos-latest
+    env:
+      DISTCHECK_CONFIGURE_FLAGS: --without-btrfs_subvol_support
     steps:
       - uses: actions/checkout@v2
       - run: brew install automake
@@ -28,6 +30,8 @@ jobs:
       - run: make distcheck
   build-win:
     runs-on: windows-latest
+    env:
+      DISTCHECK_CONFIGURE_FLAGS: --without-btrfs_subvol_support
     defaults:
       run:
         shell: msys2 {0}

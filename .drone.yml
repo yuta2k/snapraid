@@ -6,7 +6,9 @@ build:
   pull: true
   commands:
     - autoreconf -i
-    - ./configure --enable-warning-as-error --without-btrfs_subvol_support
+    - >
+        ./configure --enable-warning-as-error --without-btrfs_subvol_support
+        DISTCHECK_CONFIGURE_FLAGS=--without-btrfs_subvol_support
     - make
     - make check
 

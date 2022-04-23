@@ -8,6 +8,7 @@ script: |
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     autoreconf -i && ./configure --enable-warning-as-error && make all distcheck
   else
+    DISTCHECK_CONFIGURE_FLAGS=--without-btrfs_subvol_support
     autoreconf -i && ./configure --enable-warning-as-error --without-btrfs_subvol_support && make all distcheck
   fi
 
