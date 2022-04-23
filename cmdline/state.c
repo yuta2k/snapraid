@@ -961,7 +961,7 @@ void state_config(struct snapraid_state* state, const char* path, const char* co
 					#ifdef SUPPORT_BTRFS_SUBVOL_UUID
 					if (*uuid == 0) {
 						btrfs_subvol_uuid(dir, uuid);
-						log_fatal("%s\n", uuid);
+						// log_tag("data_subvol_uuid: %s\n", uuid);
 					}
 					#endif
 
@@ -1469,7 +1469,7 @@ static void state_map(struct snapraid_state* state)
 				#ifdef SUPPORT_BTRFS_SUBVOL_UUID
 				if (ret != 0) {
 					ret = btrfs_subvol_uuid(state->parity[l].split_map[s].path, uuid);
-					log_fatal("%s\n", uuid);
+					// log_tag("parity_subvol_uuid: %s\n", uuid);
 				}
 				#endif
 
