@@ -29,6 +29,11 @@
 #include "raid/raid.h"
 #include "raid/cpu.h"
 
+/* added in snapraid-btrfs-subvol */
+#if SUPPORT_BTRFS_SUBVOL_UUID
+#include "btrfs-subvol-support.h"
+#endif
+
 /**
  * Configure the multithread support.
  *
@@ -952,6 +957,14 @@ void state_config(struct snapraid_state* state, const char* path, const char* co
 						*uuid = 0;
 					}
 
+					/* added in snapraid-btrfs-subvol */
+					#ifdef SUPPORT_BTRFS_SUBVOL_UUID
+					if (*uuid == 0) {
+						btrfs_subvol_uuid(dir, uuid);
+						log_fatal("%s\n", uuid);
+					}
+					#endif
+
 					/* fake a different UUID when testing */
 					if (state->opt.fake_uuid) {
 						snprintf(uuid, sizeof(uuid), "fake-uuid-%d", state->opt.fake_uuid);
@@ -1451,6 +1464,15 @@ static void state_map(struct snapraid_state* state)
 				int ret;
 
 				ret = devuuid(state->parity[l].split_map[s].device, uuid, sizeof(uuid));
+
+				/* added in snapraid-btrfs-subvol */
+				#ifdef SUPPORT_BTRFS_SUBVOL_UUID
+				if (ret != 0) {
+					ret = btrfs_subvol_uuid(state->parity[l].split_map[s].path, uuid);
+					log_fatal("%s\n", uuid);
+				}
+				#endif
+
 				if (ret != 0) {
 					/* uuid not available, just ignore */
 					continue;
