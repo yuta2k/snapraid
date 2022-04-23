@@ -17,7 +17,7 @@ WARNING! UUID is unsupported for disks: 'd1', 'd2'. Not using inodes to detect m
 debian: `apt install uuid-dev`  
 RHEL: `dnf install libuuid-devel`
 
-## How to work
+## How it work
 
 Executing `state` on a btrfs subvolume (directory) returns a device number that does not physically exist.  
 The original SnapRaid looks for the device number in `/proc/self/mountinfo` to get the UUID of the disk, but it does not exist.  
