@@ -33,10 +33,6 @@ At least the following subcommands are still unavailable.
 * devices 
 * smart
 
-## TODO
-
-* Disable btrfs subvolume support on workflow test
-
 SnapRAID
 ========
 
