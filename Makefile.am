@@ -91,7 +91,7 @@ noinst_HEADERS = \
 	cmdline/unix.h
 
 if HAVE_BTRFS_SUBVOL_SUPPORT
-	noinst_HEADERS += cmdline/btrfs-subvol-support.h
+noinst_HEADERS += cmdline/btrfs-subvol-support.h
 endif
 
 mktest_SOURCES = \
