@@ -30,7 +30,7 @@
 #include "raid/cpu.h"
 
 /* added in snapraid-btrfs-subvol */
-#if BTRFS_SUBVOL_SUPPORT
+#ifdef BTRFS_SUBVOL_SUPPORT
 #include "btrfs-subvol-support.h"
 #endif
 
@@ -958,7 +958,7 @@ void state_config(struct snapraid_state* state, const char* path, const char* co
 					}
 
 					/* added in snapraid-btrfs-subvol */
-					#if BTRFS_SUBVOL_SUPPORT
+					#ifdef BTRFS_SUBVOL_SUPPORT
 					if (*uuid == 0) {
 						btrfs_subvol_uuid(dir, uuid);
 						// log_tag("data_subvol_uuid: %s\n", uuid);
@@ -1466,7 +1466,7 @@ static void state_map(struct snapraid_state* state)
 				ret = devuuid(state->parity[l].split_map[s].device, uuid, sizeof(uuid));
 
 				/* added in snapraid-btrfs-subvol */
-				#if BTRFS_SUBVOL_SUPPORT
+				#ifdef BTRFS_SUBVOL_SUPPORT
 				if (ret != 0) {
 					ret = btrfs_subvol_uuid(state->parity[l].split_map[s].path, uuid);
 					// log_tag("parity_subvol_uuid: %s\n", uuid);

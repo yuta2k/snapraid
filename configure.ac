@@ -141,11 +141,9 @@ AS_IF([test "x$with_btrfs_subvol_support" != "xno"],
 		#include <linux/btrfs.h>
 		]])
 
-		BTRFS_SUBVOL_SUPPORT=1
 		AC_DEFINE([BTRFS_SUBVOL_SUPPORT], [1], [Enable btrfs subvolume support])
 	]
 )
-AM_CONDITIONAL(HAVE_BTRFS_SUBVOL_SUPPORT, [test x"$BTRFS_SUBVOL_SUPPORT" != x])
 
 dnl Checks for architecture
 AC_C_BIGENDIAN

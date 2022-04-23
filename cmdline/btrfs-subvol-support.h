@@ -1,4 +1,4 @@
-#ifndef _BTRFS_SUBVOL_SUPPORT_H
+#if !defined(_BTRFS_SUBVOL_SUPPORT_H) && defined(BTRFS_SUBVOL_SUPPORT)
 #define _BTRFS_SUBVOL_SUPPORT_H
 
 #include <fcntl.h>
@@ -27,4 +27,4 @@ int btrfs_subvol_uuid(const char* path, char* uuid) {
 	return 1;
 }
 
-#endif /* _BTRFS_SUBVOL_SUPPORT_H */
+#endif /* !defined(_BTRFS_SUBVOL_SUPPORT_H) && BTRFS_SUBVOL_SUPPORT */
