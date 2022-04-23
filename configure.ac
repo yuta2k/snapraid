@@ -126,16 +126,24 @@ AS_IF([test "x$have_blkid" = "xyes"],
 	])
 ])
 
-dnl Check dependencies for snapraid-btrfs-subvol
-dnl TODO: want to switch enable/disable from parameter like libblkid
-AC_SEARCH_LIBS([uuid_unparse], [uuid])
-AC_CHECK_HEADERS([sys/ioctl.h, linux/btrfs.h, uuid/uuid.h])
-AC_CHECK_FUNCS([ioctl uuid_unparse])
-AC_CHECK_MEMBERS([struct btrfs_ioctl_get_subvol_info_args.uuid], [], [], [[
-#include <linux/btrfs.h>
-]])
+dnl Check for snapraid-btrfs-subvol
+AC_ARG_WITH([btrfs_subvol_support],
+    AS_HELP_STRING(
+	[--without-btrfs_subvol_support],
+	[Ignore presence of btrfs subvolume support and disable it]
+	))
+AS_IF([test "x$with_btrfs_subvol_support" != "xno"],
+	[
+		AC_SEARCH_LIBS([uuid_unparse], [uuid])
+		AC_CHECK_HEADERS([sys/ioctl.h, linux/btrfs.h, uuid/uuid.h])
+		AC_CHECK_FUNCS([ioctl uuid_unparse])
+		AC_CHECK_MEMBERS([struct btrfs_ioctl_get_subvol_info_args.uuid], [], [], [[
+		#include <linux/btrfs.h>
+		]])
 
-AC_DEFINE([SUPPORT_BTRFS_SUBVOL_UUID], [1], [Enable btrfs subvolume support])
+		AC_DEFINE([SUPPORT_BTRFS_SUBVOL_UUID], [1], [Enable btrfs subvolume support])
+	]
+)
 
 dnl Checks for architecture
 AC_C_BIGENDIAN
