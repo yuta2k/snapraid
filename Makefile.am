@@ -88,8 +88,11 @@ noinst_HEADERS = \
 	cmdline/import.h \
 	cmdline/search.h \
 	cmdline/mingw.h \
-	cmdline/unix.h \
-	cmdline/btrfs-subvol-support.h # added in snapraid-btrfs-subvol
+	cmdline/unix.h
+
+if BTRFS_SUBVOL_SUPPORT
+	noinst_HEADERS += cmdline/btrfs-subvol-support.h
+endif
 
 mktest_SOURCES = \
 	cmdline/mktest.c \
