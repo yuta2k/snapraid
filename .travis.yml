@@ -4,7 +4,12 @@ sudo: false
 
 language: c
 
-script: autoreconf -i && ./configure --enable-warning-as-error && make all distcheck
+script: |
+  if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    autoreconf -i && ./configure --enable-warning-as-error && make all distcheck
+  else
+    autoreconf -i && ./configure --enable-warning-as-error --without-btrfs_subvol_support && make all distcheck
+  fi
 
 compiler:
   - clang
