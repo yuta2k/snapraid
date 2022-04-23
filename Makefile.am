@@ -90,7 +90,7 @@ noinst_HEADERS = \
 	cmdline/mingw.h \
 	cmdline/unix.h
 
-if BTRFS_SUBVOL_SUPPORT
+if HAVE_BTRFS_SUBVOL_SUPPORT
 	noinst_HEADERS += cmdline/btrfs-subvol-support.h
 endif
 
