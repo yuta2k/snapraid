@@ -13,7 +13,7 @@
  */
 int btrfs_subvol_uuid(const char* path, char* uuid, size_t uuid_size) {
 	if (uuid_size < UUID_STR_LEN) {
-		log_fatal("The length of the UUID must be at least %d, but is %d.\n", UUID_STR_LEN, uuid_size);
+		log_fatal("The length of the UUID must be at least %d, but is %zu.\n", UUID_STR_LEN, uuid_size);
 		exit(EXIT_FAILURE);
 	}
 
