@@ -27,6 +27,7 @@ This fork attempts to get the UUID of a btrfs subvolume when the UUID cannot be 
 
 ## Limitation
 
+Only support Linux.  
 At least the following subcommands are still unavailable.
 
 * down
