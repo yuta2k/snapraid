@@ -11,7 +11,12 @@
  * Get the UUID of a subvolume from the path of the subvolume or directory under it.
  * "uuid" parameter is must be greater than or equal to UUID_STR_LEN (37 bytes).
  */
-int btrfs_subvol_uuid(const char* path, char* uuid) {
+int btrfs_subvol_uuid(const char* path, char* uuid, size_t uuid_size) {
+	if (uuid_size < UUID_STR_LEN) {
+		log_fatal("The length of the UUID must be at least %d, but is %d.\n", UUID_STR_LEN, uuid_size);
+		exit(EXIT_FAILURE);
+	}
+
 	int fd = open(path, O_RDONLY);
 	if (fd == -1) {
 		return -1;

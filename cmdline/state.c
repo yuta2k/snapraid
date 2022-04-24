@@ -958,12 +958,14 @@ void state_config(struct snapraid_state* state, const char* path, const char* co
 					}
 
 					/* added in snapraid-btrfs-subvol */
-					#ifdef BTRFS_SUBVOL_SUPPORT
 					if (*uuid == 0) {
-						btrfs_subvol_uuid(dir, uuid);
+						#ifdef BTRFS_SUBVOL_SUPPORT
+						btrfs_subvol_uuid(dir, uuid, sizeof(uuid));
 						// log_tag("data_subvol_uuid: %s\n", uuid);
+						#else
+						log_tag("data_subvol_uuid:%s: btrfs subvolume support is not enabled\n", dir);
+						#endif
 					}
-					#endif
 
 					/* fake a different UUID when testing */
 					if (state->opt.fake_uuid) {
@@ -1466,12 +1468,15 @@ static void state_map(struct snapraid_state* state)
 				ret = devuuid(state->parity[l].split_map[s].device, uuid, sizeof(uuid));
 
 				/* added in snapraid-btrfs-subvol */
-				#ifdef BTRFS_SUBVOL_SUPPORT
 				if (ret != 0) {
-					ret = btrfs_subvol_uuid(state->parity[l].split_map[s].path, uuid);
+					char* path = state->parity[l].split_map[s].path;
+					#ifdef BTRFS_SUBVOL_SUPPORT
+					ret = btrfs_subvol_uuid(path, uuid, sizeof(uuid));
 					// log_tag("parity_subvol_uuid: %s\n", uuid);
+					#else
+					log_tag("parity_subvol_uuid:%s: btrfs subvolume support is not enabled\n", path);
+					#endif
 				}
-				#endif
 
 				if (ret != 0) {
 					/* uuid not available, just ignore */
