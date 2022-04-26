@@ -32,4 +32,4 @@ int btrfs_subvol_uuid(const char* path, char* uuid, size_t uuid_size) {
 	return 1;
 }
 
-#endif /* !defined(_BTRFS_SUBVOL_SUPPORT_H) && BTRFS_SUBVOL_SUPPORT */
+#endif /* !defined(_BTRFS_SUBVOL_SUPPORT_H) && defined(BTRFS_SUBVOL_SUPPORT) */
