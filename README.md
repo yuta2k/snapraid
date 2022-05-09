@@ -12,7 +12,7 @@ WARNING! UUID is unsupported for disks: 'd1', 'd2'. Not using inodes to detect m
 
 ## Dependency
 
-`libuuid.so` and `uuid/uuid.h` is required.
+`libuuid.so` and `uuid/uuid.h` are required.
 
 debian: `apt install uuid-dev`  
 RHEL: `dnf install libuuid-devel`
