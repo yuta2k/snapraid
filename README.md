@@ -21,7 +21,7 @@ RHEL: `dnf install libuuid-devel`
 
 Executing `state` on a btrfs subvolume (directory) returns a device number that does not physically exist.  
 The original SnapRaid looks for the device number in `/proc/self/mountinfo` to get the UUID of the disk, but it does not exist.  
-Detail: https://lwn.net/Articles/866709/
+Detail: https://lwn.net/Articles/866582/
 
 This fork attempts to get the UUID of a btrfs subvolume when the UUID cannot be getted by the above method.
 
